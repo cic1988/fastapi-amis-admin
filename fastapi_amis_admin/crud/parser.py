@@ -4,7 +4,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type, T
 from uuid import UUID
 
 import sqlalchemy
-from fastapi.utils import create_cloned_field, create_response_field
+from fastapi.utils import create_cloned_field, create_model_field
 from pydantic import BaseConfig, BaseModel
 from pydantic.fields import FieldInfo
 from sqlalchemy import Column, String, Table
@@ -266,7 +266,7 @@ def _get_label_modelfield(label: Label) -> ModelField:
             type_ = label.expression.type.python_type
         except NotImplementedError:
             type_ = Union[float, int, str, None]
-        modelfield = create_response_field(
+        modelfield = create_model_field(
             name=label.key,
             type_=type_,
         )
@@ -360,7 +360,7 @@ def insfield_to_modelfield(insfield: InstrumentedAttribute) -> Optional[ModelFie
         field_info_kwargs["annotation"] = type_
     if expression.comment:
         field_info_kwargs["title"] = expression.comment
-    return create_response_field(name=insfield.key, type_=type_, required=required, field_info=FieldInfo(**field_info_kwargs))
+    return create_model_field(name=insfield.key, type_=type_, required=required, field_info=FieldInfo(**field_info_kwargs))
 
 
 def register_model(schema: Type[SchemaT]):
